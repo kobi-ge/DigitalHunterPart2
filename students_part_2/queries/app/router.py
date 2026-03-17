@@ -41,3 +41,14 @@ def get_movement_of_quality_targets():
         """
     result = mysql_instance.get(query=query)
     return result
+
+@router.get("/count_signal_tyoe")
+def get_count_signal_type():
+    query = """
+            SELECT signal_type, COUNT(signal_type) as signal_count
+            FROM intel_signals
+            GROUP BY signal_type
+            ORDER BY  COUNT(signal_type) DESC;
+            """
+    result = mysql_instance.get(query=query)
+    return result
