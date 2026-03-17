@@ -1,5 +1,4 @@
 from mysql.connector import connect, errors
-import os
 
 
 class MysqlConnection:
@@ -35,21 +34,3 @@ class MysqlConnection:
             self.logger.error(f"error retrieving data: {e}")
 
 
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format="%(asctime)s [%(levelname)s] %(message)s",
-# )
-
-# query = """
-# SELECT * FROM targets;
-# """
-# a = MysqlConnection(
-#     host="localhost",
-#     port=3306,
-#     password="root",
-#     user="root",
-#     database="digital_hunter",
-#     logger=logging.getLogger("asdf")
-# )
-# a.connect()
-# a.get(query=query)

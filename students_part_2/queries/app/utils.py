@@ -21,9 +21,3 @@ def create_graph(xpoints: list, ypoints:list):
     plt.savefig(img_buf, format='png')
     plt.close(fig)
     return img_buf
-
-
-create_graph(
-    xpoints=[1,2,3,4],
-    ypoints=[2,3,4,5]
-)

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, Response
 import logging
+import os
 
 from mysql_connection import MysqlConnection
 from utils import create_graph
@@ -11,17 +12,16 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
+logger = logging.getLogger(MysqlConnection.__module__)
 
-query = """
-SELECT * FROM targets;
-"""
+
 mysql_instance = MysqlConnection(
-    host="localhost",
-    port=3306,
-    password="root",
-    user="root",
-    database="digital_hunter",
-    logger=logging.getLogger("asdf")
+    host=os.getenv("MYSQL_HOST", "localhost"),
+    port=os.getenv("MYSQL_PORT", 3306),
+    password=os.getenv("MYSQL_PASSWORD", "root"),
+    user=os.getenv("MYSQL_USER", "root"),
+    database=os.getenv("MYSQL_DATABASE", "digital_hunter"),
+    logger=logger
 )
 mysql_instance.connect()
 
@@ -70,10 +70,10 @@ def get_top_3_unknown_entities():
 
 
 @router.get("/entity_id_graph")
-def create_entity_id_graph(background_tasks: BackgroundTasks):
+def create_entity_id_graph(background_tasks: BackgroundTasks, xpoints: list, ypoints: list):
     img_buf = create_graph(
-    xpoints=[1,2,3,4],
-    ypoints=[2,3,4,5]
+    xpoints=xpoints,
+    ypoints=ypoints
 )
     background_tasks.add_task(img_buf.close)
     headers = {'Content-Disposition': 'inline; filename="out.png"'}

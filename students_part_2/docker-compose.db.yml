@@ -24,6 +24,19 @@ services:
     depends_on:
       - mysql
 
+  queries:
+    build: queries
+    ports:
+    - 8001:8001
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: digital_hunter
+    depends_on:
+      - mysql
+      - phpmyadmin
 
 
 volumes:
