@@ -11,5 +11,19 @@ services:
       - mysql_data:/var/lib/mysql
       - ./db/dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports: 
+    - 8080:80
+    restart: always
+    links: 
+    - mysql
+    environment:
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql
+
+      
 volumes:
   mysql_data:
