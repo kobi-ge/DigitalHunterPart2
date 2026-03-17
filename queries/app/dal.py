@@ -26,14 +26,14 @@ get_targets_that_wakes_up_query = """
         SELECT entity_id, distance_from_last
         FROM `intel_signals`
         WHERE time(timestamp) BETWEEN '08:00:00' AND '20:00:00'
-        GROUP BY entity_id, distance_from_last
+        GROUP BY entity_id, date(timestamp), distance_from_last
         HAVING distance_from_last = 0
         ),
         moving_targets as (
         SELECT entity_id, distance_from_last
         FROM intel_signals
         WHERE time(timestamp) BETWEEN '20:00:00' AND '08:00:00'
-        GROUP BY entity_id, distance_from_last
+        GROUP BY entity_id, date(timestamp), distance_from_last
         HAVING distance_from_last >= 10
         )
         select entity_id 

@@ -28,12 +28,6 @@ mysql_instance.connect()
 
 
 
-@router.get("/health")
-def health_check():
-    return {
-        "status": "healthy"
-    }
-
 @router.get("/movement_quality_targets")
 def get_movement_of_quality_targets():
     result = mysql_instance.get(query=get_movement_of_quality_targets_query)

@@ -25,7 +25,7 @@ class MysqlConnection:
                 self.logger.info(f"connection with mysql established")
                 return
             except errors.Error as e:
-                self.logger.error(f"error connecting to mysql (attempt {attempt + 1}/{retries}): {e}")
+                self.logger.error(f"error connecting to mysql attempt: {attempt + 1}/{retries}: {e}")
                 if attempt < retries - 1:
                     time.sleep(5)
 
