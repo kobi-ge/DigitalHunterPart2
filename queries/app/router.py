@@ -4,6 +4,7 @@ import os
 
 from mysql_connection import MysqlConnection
 from utils import create_graph, create_two_lists
+from dal import *
 
 router = APIRouter()
 
@@ -35,39 +36,24 @@ def health_check():
 
 @router.get("/movement_quality_targets")
 def get_movement_of_quality_targets():
-    query = """
-        SELECT entity_id, target_name, priority_level 
-        FROM targets
-        WHERE (priority_level = 1 OR priority_level = 2)
-        AND movement_distance_km >= 5;
-        """
-    result = mysql_instance.get(query=query)
+    result = mysql_instance.get(query=get_movement_of_quality_targets_query)
     return result
 
-@router.get("/count_signal_tyoe")
+@router.get("/count_signal_type")
 def get_count_signal_type():
-    query = """
-            SELECT signal_type, COUNT(signal_type) as signal_count
-            FROM intel_signals
-            GROUP BY signal_type
-            ORDER BY  COUNT(signal_type) DESC;
-            """
-    result = mysql_instance.get(query=query)
+    result = mysql_instance.get(query=get_count_signal_type_query)
     return result
 
 @router.get("/top_3_unknown")
 def get_top_3_unknown_entities():
-    query = """
-        SELECT entity_id, COUNT(entity_id) as reports_amount
-        FROM intel_signals
-        WHERE priority_level = 99
-        GROUP BY entity_id
-        order by COUNT(entity_id) DESC
-        LIMIT 3;
-        """
-    result = mysql_instance.get(query=query)
+    result = mysql_instance.get(query=get_top_3_unknown_entities_query)
     return result
 
+@router.get("/targets_wake_up")
+def get_targets_that_wakes_up():
+    result = mysql_instance.get(query=get_targets_that_wakes_up_query)
+    return result
+    
 
 @router.get("/entity_id_graph")
 def create_entity_id_graph(background_tasks: BackgroundTasks, entity_id: str):
