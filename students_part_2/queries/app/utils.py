@@ -21,3 +21,12 @@ def create_graph(xpoints: list, ypoints:list):
     plt.savefig(img_buf, format='png')
     plt.close(fig)
     return img_buf
+
+
+def create_two_lists(coords):
+    xpoints = []
+    ypoints = []
+    for location in coords:
+        xpoints.append(location[0])
+        ypoints.append(location[1])
+    return xpoints, ypoints

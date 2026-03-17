@@ -1,4 +1,5 @@
 from mysql.connector import connect, errors
+import time
 
 
 class MysqlConnection:
@@ -10,19 +11,23 @@ class MysqlConnection:
         self.database = database
         self.logger = logger
 
-    def connect(self):
-        try:
-            self.con = connect(
-                host = self.host,
-                port = self.port,
-                password = self.password,
-                user = self.user,
-                database = self.database
-            )
-            self.cursor = self.con.cursor()
-            self.logger.info(f"connection with mysql established")
-        except errors.Error as e:
-            self.logger.error(f"error connecting to mysql: {e}")
+    def connect(self, retries=10):
+        for attempt in range(retries):
+            try:
+                self.con = connect(
+                    host = self.host,
+                    port = self.port,
+                    password = self.password,
+                    user = self.user,
+                    database = self.database
+                )
+                self.cursor = self.con.cursor()
+                self.logger.info(f"connection with mysql established")
+                return
+            except errors.Error as e:
+                self.logger.error(f"error connecting to mysql (attempt {attempt + 1}/{retries}): {e}")
+                if attempt < retries - 1:
+                    time.sleep(5)
 
     def get(self, query):
         try:

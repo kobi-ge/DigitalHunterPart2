@@ -3,7 +3,7 @@ import logging
 import os
 
 from mysql_connection import MysqlConnection
-from utils import create_graph
+from utils import create_graph, create_two_lists
 
 router = APIRouter()
 
@@ -70,11 +70,18 @@ def get_top_3_unknown_entities():
 
 
 @router.get("/entity_id_graph")
-def create_entity_id_graph(background_tasks: BackgroundTasks, xpoints: list, ypoints: list):
+def create_entity_id_graph(background_tasks: BackgroundTasks, entity_id: str):
+    query = f"""
+        SELECT reported_lon, reported_lat
+        FROM intel_signals 
+        WHERE entity_id LIKE '{entity_id}';
+        """
+    result = mysql_instance.get(query=query)
+    xpoints, ypoints = create_two_lists(result)
     img_buf = create_graph(
     xpoints=xpoints,
     ypoints=ypoints
-)
+    )
     background_tasks.add_task(img_buf.close)
     headers = {'Content-Disposition': 'inline; filename="out.png"'}
     return Response(img_buf.getvalue(), headers=headers, media_type='image/png')
