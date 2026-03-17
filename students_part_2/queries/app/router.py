@@ -1,6 +1,8 @@
-from fastapi import APIRouter
-from mysql_connection import MysqlConnection
+from fastapi import APIRouter, BackgroundTasks, Response
 import logging
+
+from mysql_connection import MysqlConnection
+from utils import create_graph
 
 router = APIRouter()
 
@@ -65,3 +67,15 @@ def get_top_3_unknown_entities():
         """
     result = mysql_instance.get(query=query)
     return result
+
+
+@router.get("/entity_id_graph")
+def create_entity_id_graph(background_tasks: BackgroundTasks):
+    img_buf = create_graph(
+    xpoints=[1,2,3,4],
+    ypoints=[2,3,4,5]
+)
+    background_tasks.add_task(img_buf.close)
+    headers = {'Content-Disposition': 'inline; filename="out.png"'}
+    return Response(img_buf.getvalue(), headers=headers, media_type='image/png')
+
