@@ -1,6 +1,6 @@
 from mysql.connector import connect, errors
 import os
-import logging
+
 
 class MysqlConnection:
     def __init__(self, host, port, password, user, database, logger):
@@ -34,3 +34,22 @@ class MysqlConnection:
         except Exception as e:
             self.logger.error(f"error retrieving data: {e}")
 
+
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s [%(levelname)s] %(message)s",
+# )
+
+# query = """
+# SELECT * FROM targets;
+# """
+# a = MysqlConnection(
+#     host="localhost",
+#     port=3306,
+#     password="root",
+#     user="root",
+#     database="digital_hunter",
+#     logger=logging.getLogger("asdf")
+# )
+# a.connect()
+# a.get(query=query)
