@@ -52,3 +52,16 @@ def get_count_signal_type():
             """
     result = mysql_instance.get(query=query)
     return result
+
+@router.get("/top_3_unknown")
+def get_top_3_unknown_entities():
+    query = """
+        SELECT entity_id, COUNT(entity_id) as reports_amount
+        FROM intel_signals
+        WHERE priority_level = 99
+        GROUP BY entity_id
+        order by COUNT(entity_id) DESC
+        LIMIT 3;
+        """
+    result = mysql_instance.get(query=query)
+    return result
